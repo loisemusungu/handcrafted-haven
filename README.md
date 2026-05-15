@@ -1,4 +1,3 @@
-Your project already has a strong foundation. Here’s a polished and professional project overview and design direction you can use for your assignment documentation, GitHub README, presentation, or portfolio.
 
 # Handcrafted Haven
 
