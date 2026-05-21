@@ -8,7 +8,6 @@ export default function Home() {
           LOGO
         </div>
 
-        {/* Navigation Links */}
         <nav className="flex gap-6">
           <a href="#">Home</a>
           <a href="#">Shop</a>
