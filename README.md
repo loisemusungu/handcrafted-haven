@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# W02 Group Project: Project Setup & Design
 
-## Getting Started
+## 📌 Project Overview
+This week our group focused on setting up the project environment, defining the design theme, and planning initial components.  
+We created the GitHub repository, organized the project board, cloned the repo locally, and began drafting user stories and design ideas for the landing page.
 
-First, run the development server:
+## 🚀 Repository
+https://github.com/loisemusungu/handcrafted-haven
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📄 Project Board
+[GitHub Project Board](https://github.com/loisemusungu/handcrafted-haven/projects)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧩 Meeting Summary
+- **Challenge:** Coordinating theme ideas across members (color scheme, typography, layout).  
+- **Success:** All members successfully cloned the repository, created the initial project folders and files, and were invited to collaborate.  
+- **Insight:** Using the board columns (Backlog, Ready, In Progress, In Review) made it easier to track responsibilities and progress.  
+- **Participants:** Alison, Jonathan Muembia, Alliana Okaikai Tenadu, Loise Mwongeli Musungu, Gabriel Aura Mirah, Dehyu DM Cassell
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 👥 Group Contributions
+- Created the project summary README.md file (Backlog task #1).  
+- Cloned the repository and verified local setups.  
+- Created project folders and files.  
+- Invited members to collaborate and confirmed access.  
+- Contributed to design theme discussions (*Handcrafted Haven*).  
+- Updated project board tasks with assignments for each member.
