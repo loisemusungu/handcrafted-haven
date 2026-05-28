@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Image from "next/image";
 import { Heart, ShoppingCart, Search ,Home, Grid2X2Icon , User} from "lucide-react";
 
@@ -25,12 +26,18 @@ export default function Navbar() {
 
           {/* NAV */}
           <nav className="flex gap-8 text-sm font-medium">
-            <a className="text-primary border-b-2 border-primary">Home</a>
-            <a>Categories</a>
-            <a>Artisans</a>
-            <a>Products</a>
-            <a>About</a>
-          </nav>
+  <Link href="/" className="text-primary border-b-2 border-primary">
+    Home
+  </Link>
+
+  <Link href="/categories">Categories</Link>
+
+  <Link href="/artisans">Artisans</Link>
+
+  <Link href="/products">Products</Link>
+
+  <Link href="/about">About</Link>
+</nav>
 
           {/* SEARCH + ICONS */}
           <div className="flex items-center gap-4">
@@ -124,15 +131,14 @@ export default function Navbar() {
 
 
         <nav className="flex md:hidden fixed bottom-0 w-full bg-white text-primary border-b-2 border-primary justify-around py-3 z-50">
- <a className="flex flex-col items-center gap-1">
-    <Home size={20}/>
-    Home
-  </a>           
-   <a className="flex flex-col items-center gap-1">
-    <Grid2X2Icon
-     size={20} />
-    Categories
-  </a>           
+<Link href="/" className="flex flex-col items-center gap-1">
+  <Home size={20} />
+  Home
+</Link>
+   <Link href="/products" className="flex flex-col items-center gap-1">
+  <Grid2X2Icon size={20} />
+  Products
+</Link>     
    <a className="flex flex-col items-center gap-1">
     <ShoppingCart size={20} />
     Cart

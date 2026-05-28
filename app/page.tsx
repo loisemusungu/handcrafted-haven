@@ -1,4 +1,6 @@
+import Link from "next/link";
 import Image from "next/image";
+
 export default function Home() {
   return (
     <main>
@@ -12,14 +14,14 @@ export default function Home() {
           Discover unique handcrafted items made with love, care, and creativity.
         </p>
 
-        <button className="bg-amber-700 text-white px-6 py-3 rounded-lg text-lg hover:bg-amber-800">
-          Shop Now
-        </button>
+        {/* FIXED BUTTON */}
+        <Link href="/products">
+          <button className="bg-amber-700 text-white px-6 py-3 rounded-lg text-lg hover:bg-amber-800">
+            Shop Now
+          </button>
+        </Link>
 
       </section>
-      
-
     </main>
-    
   );
 }
