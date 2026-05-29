@@ -7,10 +7,16 @@ export async function GET() {
     const result = await pool.query(
       "SELECT * FROM products ORDER BY id DESC"
     );
+
     return NextResponse.json(result.rows);
   } catch (error) {
+    console.error("GET PRODUCTS ERROR:", error);
+
     return NextResponse.json(
-      { error: "Failed to fetch products" },
+      {
+        error: "Failed to fetch products",
+        details: String(error),
+      },
       { status: 500 }
     );
   }
@@ -21,7 +27,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    console.log("BODY RECEIVED:", body); // 👈 DEBUG
+    console.log("BODY RECEIVED:", body);
 
     const { name, price, description, category, image } = body;
 
@@ -40,12 +46,14 @@ export async function POST(req: Request) {
     );
 
     return NextResponse.json(result.rows[0], { status: 201 });
-
   } catch (error: any) {
     console.error("POST ERROR:", error);
 
     return NextResponse.json(
-      { error: "Failed to create product", details: error.message },
+      {
+        error: "Failed to create product",
+        details: error.message,
+      },
       { status: 500 }
     );
   }
