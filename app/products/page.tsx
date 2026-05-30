@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 type Product = {
@@ -8,7 +9,7 @@ type Product = {
   price: number;
   description: string;
   category: string;
-  image: string;
+  image: string | null;
 };
 
 export default function ProductsPage() {
@@ -16,24 +17,39 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    async function fetchProducts() {
       try {
         const response = await fetch("/api/products");
         const data = await response.json();
 
         console.log("API Response:", data);
 
-        // Ensure products is always an array
-        setProducts(Array.isArray(data) ? data : data.products || []);
+        const productsArray = Array.isArray(data)
+          ? data
+          : data.products || [];
+
+        setProducts(productsArray);
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchProducts();
   }, []);
+
+  const getValidImage = (image: string | null) => {
+    if (
+      image &&
+      image.startsWith("http") &&
+      image !== "https://..."
+    ) {
+      return image;
+    }
+
+    return "/placeholder.png";
+  };
 
   if (loading) {
     return (
@@ -45,46 +61,60 @@ export default function ProductsPage() {
 
   return (
     <div className="p-6 pt-24">
-      <h1 className="text-2xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-8">
         Products
       </h1>
 
       {products.length === 0 ? (
         <p>No products found.</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="border rounded-lg shadow-sm hover:shadow-md transition overflow-hidden"
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="h-32 w-full object-cover"
-              />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {products.map((product) => {
+            console.log("IMAGE URL:", product.image);
 
-              <div className="p-3">
-                <h2 className="font-semibold text-sm">
-                  {product.name}
-                </h2>
+            return (
+              <div
+                key={product.id}
+                className="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition duration-300"
+              >
+                <div className="relative w-full h-64">
+                  <Image
+                    src={getValidImage(product.image)}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
 
-                <p className="text-xs text-gray-600 line-clamp-2 mt-1">
-                  {product.description}
-                </p>
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-2">
+                    <h2 className="font-semibold text-lg line-clamp-1">
+                      {product.name}
+                    </h2>
 
-                <div className="flex justify-between items-center mt-3">
-                  <p className="text-sm font-bold">
-                    KES {product.price}
+                    <span className="text-xs bg-gray-100 px-2 py-1 rounded-full whitespace-nowrap">
+                      {product.category}
+                    </span>
+                  </div>
+
+                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                    {product.description}
                   </p>
 
-                  <span className="text-[10px] bg-gray-200 px-2 py-1 rounded">
-                    {product.category}
-                  </span>
+                  <div className="mt-4 flex items-center justify-between">
+                    <p className="text-lg font-bold text-black">
+                      KES {product.price}
+                    </p>
+
+                    <button className="bg-black text-white text-sm px-4 py-2 rounded-lg hover:opacity-90 transition">
+                      Add to Cart
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>
