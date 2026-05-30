@@ -1,12 +1,11 @@
 import HeroSection from "@/components/herosection";
-import ProductsPage from "./products/page";
+import FeaturesProductsPage from "./products/featuresproduct";
 export default function Home() {
   return (
     <main>
       <HeroSection />
     <div className="container mx-auto ">
-      <ProductsPage />
-
+      <FeaturesProductsPage />
     </div>
 
     </main>

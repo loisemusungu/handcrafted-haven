@@ -1,79 +1,73 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useActionState, useEffect } from "react";
 import { CreateProductButton } from "../button/CreateProduct";
-import { createProduct, type CreateProductInput } from "../action/productActions";
-
-export type Product = {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string | null;
-};
+import { createProduct } from "../action/productActions";
+import type { Product, CreateProductInput } from "@/types/product";
 
 type Props = {
   setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
 };
 
+// Updated shape to include optional product data
+type ActionState = {
+  error: string | null;
+  success: boolean;
+  data: Product | null; 
+};
+
 export function ProductCreateForm({ setProducts }: Props) {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [state, formAction, isPending] = useActionState<ActionState, FormData>(
+    async (prevState, formData) => {
+      const name = String(formData.get("productName") ?? "").trim();
+      const price = Number(formData.get("price"));
+      const description = String(formData.get("description") ?? "").trim();
+      const category = String(formData.get("category") ?? "").trim();
+      const image = String(formData.get("image") ?? "").trim();
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage(null);
-    setIsSubmitting(true);
+      if (!name) return { error: "Product name cannot be empty.", success: false, data: null };
+      if (!description) return { error: "Description cannot be empty.", success: false, data: null };
+      if (Number.isNaN(price) || price <= 0) {
+        return { error: "Price must be a valid number greater than 0.", success: false, data: null };
+      }
 
-    const formData = new FormData(event.currentTarget);
-    const name = String(formData.get("productName") ?? "").trim();
-    const price = Number(formData.get("price"));
-    const description = String(formData.get("description") ?? "").trim();
-    const category = String(formData.get("category") ?? "").trim();
-    const image = String(formData.get("image") ?? "").trim();
+      const productInput: CreateProductInput = {
+        name,
+        price,
+        description,
+        category: category || "Uncategorized",
+        image: image || "/images/placeholder.png",
+      };
 
-    if (!name) {
-      setErrorMessage("Product name cannot be empty.");
-      setIsSubmitting(false);
-      return;
+      try {
+        const createdProduct = await createProduct(productInput);
+        
+        // Return the product to the state instead of executing an inline state update
+        return { error: null, success: true, data: createdProduct };
+      } catch (error) {
+        return {
+          error: error instanceof Error ? error.message : "Failed to create product. Please try again.",
+          success: false,
+          data: null,
+        };
+      }
+    },
+    { error: null, success: false, data: null } // Initial state
+  );
+
+  // 🔔 Safely notify the parent UI array when the state succeeds
+  useEffect(() => {
+    if (state.success && state.data) {
+      setProducts((prev) => {
+        // Prevent accidental duplicates in StrictMode
+        if (prev.some((p) => p.id === state.data!.id)) return prev;
+        return [...prev, state.data!];
+      });
     }
-
-    if (!description) {
-      setErrorMessage("Description cannot be empty.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    if (Number.isNaN(price) || price <= 0) {
-      setErrorMessage("Price must be a valid number greater than 0.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    const productInput: CreateProductInput = {
-      name,
-      price,
-      description,
-      category: category || "Uncategorized",
-      image: image || null,
-    };
-
-    try {
-      const createdProduct = await createProduct(productInput);
-      setProducts((prev) => [...prev, createdProduct]);
-      event.currentTarget.reset();
-      setErrorMessage(null);
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to create product. Please try again.";
-      setErrorMessage(message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  }, [state.success, state.data, setProducts]);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md">
+    <form action={formAction} className="flex flex-col gap-4 max-w-md">
       {/* Name */}
       <div>
         <label className="block text-sm font-medium mb-1">
@@ -140,16 +134,23 @@ export function ProductCreateForm({ setProducts }: Props) {
         />
       </div>
 
-      {/* Error */}
-      {errorMessage && (
+      {/* Error Message */}
+      {state.error && (
         <p className="text-sm text-red-600 font-medium" role="alert">
-          {errorMessage}
+          {state.error}
         </p>
       )}
 
-      {/* Submit */}
-      <CreateProductButton type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Creating..." : "Create Product"}
+      {/* 🟢 Optional Inline Success Banner */}
+      {state.success && (
+        <p className="text-sm text-green-600 font-medium" role="status">
+          Product created successfully!
+        </p>
+      )}
+
+      {/* Submit Button */}
+      <CreateProductButton type="submit" disabled={isPending}>
+        {isPending ? "Creating..." : "Create Product"}
       </CreateProductButton>
     </form>
   );

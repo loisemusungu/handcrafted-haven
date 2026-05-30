@@ -4,18 +4,16 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import DashboardSkeleton from "@/components/DashboardSkeleton";
-import { ProductCreateForm } from "@/components/form/ProductCreateForm";
 import type { Product } from "@/types/product";
 
-export default function ProductsPage() {
+export default function FeaturesProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
-    async function fetchProducts() {
+    async function FeaturesProducts() {
       try {
         const response = await fetch("/api/products");
         if (!response.ok) throw new Error("Network response error");
@@ -31,7 +29,7 @@ export default function ProductsPage() {
       }
     }
 
-    fetchProducts();
+    FeaturesProducts();
     return () => { isMounted = false; };
   }, []);
 
@@ -52,33 +50,12 @@ export default function ProductsPage() {
 
   return (
     <div className="p-6 pt-24 max-w-7xl mx-auto">
-      {/* Header Controls */}
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Products</h1>
-          <p className="text-sm text-gray-500 mt-1">{products.length} items available</p>
-        </div>
+        {/* features Product page  */}
 
-        <button
-          onClick={() => setShowForm((prev) => !prev)}
-          className={`self-start sm:self-auto px-4 py-2 font-semibold rounded-lg text-sm transition-colors border ${
-            showForm 
-              ? "bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300" 
-              : "bg-blue-600 hover:bg-blue-700 text-white border-transparent"
-          }`}
-        >
-          {showForm ? "Close Form" : "Create Product"}
-        </button>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold text-gray-900">Features Products</h1>
       </div>
-
-      {/* Dynamic Form Drawer */}
-      {showForm && (
-        <div className="mb-8 p-6 bg-gray-50 border rounded-xl max-w-xl animate-in fade-in slide-in-from-top-2 duration-200">
-          <ProductCreateForm setProducts={setProducts} />
-        </div>
-      )}
-
-      {/* Product Catalog Display Grid */}
+        {/* Product Catalog Display Grid */}
       {products.length === 0 ? (
         <div className="text-center py-12 border border-dashed rounded-xl">
           <p className="text-gray-500 font-medium">No products found.</p>

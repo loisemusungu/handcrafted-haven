@@ -1,12 +1,5 @@
-// actions/productActions.ts
 
-export type CreateProductInput = {
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string | null;
-};
+import type { CreateProductInput } from "@/types/product";
 
 export async function createProduct(product: CreateProductInput) {
   try {
