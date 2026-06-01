@@ -37,6 +37,7 @@ The project is collaboratively developed by:
 * Alliana Okaikai Tenadu
 * Loise Mwongeli Musungu
 * Jonathan Muembia
+* Alison Hopa
 
 Each team member contributes to different aspects of the project including:
 
